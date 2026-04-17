@@ -77,7 +77,8 @@ public:
 
 
     void undoAction() {
-        int main() {
+// PART 3: MEMBER 3 (Main Menu & Integration)
+int main() {
     BankDatabase myBank;
     BankOperations myOps;
     int choice, id;
@@ -88,17 +89,16 @@ public:
         cout << "\n====================================" << endl;
         cout << "      BANK MANAGEMENT SYSTEM        " << endl;
         cout << "====================================" << endl;
-        cout << " 1. Open New Account" << endl;
+        cout << " 1. Open New Account (Hashing)" << endl;
         cout << " 2. Search Account Info" << endl;
         cout << " 3. Join Waiting Line (Queue)" << endl;
         cout << " 4. Serve Next Customer (Dequeue)" << endl;
-        cout << " 5. Undo Last Action (Stack)" << endl;
-        cout << " 6. Exit" << endl;
+        cout << " 5. Exit" << endl;
         cout << "------------------------------------" << endl;
         cout << " ENTER CHOICE: ";
         cin >> choice;
 
-        if (choice == 6) {
+        if (choice == 5) {
             cout << "\nExiting... Thank you!" << endl;
             break;
         }
@@ -109,7 +109,6 @@ public:
                 cout << "Enter Name: "; cin >> name;
                 cout << "Enter Deposit Amount: "; cin >> bal;
                 myBank.addAccount(id, name, bal);
-                myOps.saveHistory("Created Account: " + name);
                 break;
             case 2:
                 cout << "Enter ID to search: "; cin >> id;
@@ -122,16 +121,9 @@ public:
             case 4:
                 myOps.serveCustomer();
                 break;
-            case 5:
-                myOps.undoAction();
-                break;
             default:
-                cout << "\n[Invalid] Please select 1-6." << endl;
+                cout << "\n[Invalid] Please select a valid option (1-5)." << endl;
         }
     }
     return 0;
 }
-        if (top == -1) cout << "\n[History] Nothing to undo!" << endl;
-        else cout << "\n[Undo] Reversing last action: " << stackArray[top--] << endl;
-    }
-};
