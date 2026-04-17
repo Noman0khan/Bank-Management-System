@@ -42,26 +42,25 @@ public:
         }
     }
 };
-
-// PART 2: MEMBER 2 (Operations - Queue & Stack)
+// ==========================================
+// PART 2: MEMBER 2 (Operations - Token Queue)
+// কাজ: ব্যাংকের সিরিয়াল বা টোকেন লাইন মেইনটেইন করা
+// ==========================================
 
 class BankOperations {
-    int queueArray[100];
-    int front = 0;
-    int rear = 0;
-
-    string stackArray[100];
-    int top = -1;
+    int queueArray[100]; // ১০০ জনের ওয়েটিং লাইন
+    int front = 0;       // লাইনের শুরু
+    int rear = 0;        // লাইনের শেষ
 
 public:
-   
+    // Queue Logic: First-In First-Out (FIFO)
     void addToLine(int id) {
         if (rear < 100) {
             queueArray[rear] = id;
-            rear++; 
-            cout << "\n[Queue] ID " << id << " is at position " << (rear - front) << " in line." << endl;
+            rear++; // লাইনের পেছনে একজন যুক্ত হলো
+            cout << "\n[Queue] ID " << id << " added to the line. Position: " << (rear - front) << endl;
         } else {
-            cout << "\n[Error] Line is full!" << endl;
+            cout << "\n[Error] Waiting line is full!" << endl;
         }
     }
 
@@ -70,16 +69,12 @@ public:
             cout << "\n[Empty] No one is waiting in the line!" << endl;
         } else {
             cout << "\n[Service] Now serving Customer ID: " << queueArray[front] << endl;
-            front++; 
+            front++; // সেবা দেওয়া শেষ, পরের জন সামনে আসবে
         }
     }
+};
 
-   
-    void saveHistory(string action) {
-        if (top < 99) {
-            stackArray[++top] = action;
-        }
-    }
+
 
     void undoAction() {
         int main() {
