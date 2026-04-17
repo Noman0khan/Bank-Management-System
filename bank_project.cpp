@@ -1,4 +1,47 @@
+#include <iostream>
+#include <string>
+#include <iomanip> 
+using namespace std;
 
+// PART 1: MEMBER 1 (Data Structure & Database)
+
+struct Customer {
+    int id;
+    string name;
+    double balance;
+};
+class BankDatabase {
+    Customer table[100];
+    bool isFull[100];
+
+public:
+    BankDatabase() {
+        for(int i = 0; i < 100; i++) isFull[i] = false;
+    }
+
+    // Hash Function: 
+    int getHash(int id) { return id % 100; }
+
+    void addAccount(int id, string name, double bal) {
+        int index = getHash(id);
+        table[index].id = id;
+        table[index].name = name;
+        table[index].balance = bal;
+        isFull[index] = true;
+        cout << "\n[Success] Account created for " << name << " (ID: " << id << ")" << endl;
+    }
+
+    void findAndShow(int id) {
+        int index = getHash(id);
+        if (isFull[index] && table[index].id == id) {
+            cout << "\n--- Account Details ---" << endl;
+            cout << "Name: " << table[index].name << endl;
+            cout << "Balance: $" << fixed << setprecision(2) << table[index].balance << endl;
+        } else {
+            cout << "\n[Error] Account not found!" << endl;
+        }
+    }
+};
 
 // PART 2: MEMBER 2 (Operations - Queue & Stack)
 
