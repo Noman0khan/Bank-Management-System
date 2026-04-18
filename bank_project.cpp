@@ -1,47 +1,40 @@
 #include <iostream>
 #include <string>
-#include <iomanip> 
+#include <iomanip>
+
 using namespace std;
 
-// PART 1: MEMBER 1 (Data Structure & Database)
+// PART 1: MEMBER 1 (Data & Hashing)
 
 struct Customer {
     int id;
     string name;
     double balance;
 };
-class BankDatabase {
-    Customer table[100];
-    bool isFull[100];
 
-public:
-    BankDatabase() {
-        for(int i = 0; i < 100; i++) isFull[i] = false;
+Customer accounts[100]; 
+bool isOccupied[100];   
+
+void createAccount(int id, string name, double bal) {
+    int index = id % 100; // Feature: Hash Table for efficient searching
+    accounts[index].id = id;
+    accounts[index].name = name;
+    accounts[index].balance = bal;
+    isOccupied[index] = true;
+    cout << "\n[Success] Account created for " << name << endl;
+}
+
+void searchAccount(int id) {
+    int index = id % 100;
+    if (isOccupied[index] && accounts[index].id == id) {
+        cout << "\n--- Account Details ---" << endl;
+        cout << "Name: " << accounts[index].name << endl;
+        cout << "Balance: $" << fixed << setprecision(2) << accounts[index].balance << endl;
+    } else {
+        cout << "\n[Error] Account not found!" << endl;
     }
+}
 
-    // Hash Function: 
-    int getHash(int id) { return id % 100; }
-
-    void addAccount(int id, string name, double bal) {
-        int index = getHash(id);
-        table[index].id = id;
-        table[index].name = name;
-        table[index].balance = bal;
-        isFull[index] = true;
-        cout << "\n[Success] Account created for " << name << " (ID: " << id << ")" << endl;
-    }
-
-    void findAndShow(int id) {
-        int index = getHash(id);
-        if (isFull[index] && table[index].id == id) {
-            cout << "\n--- Account Details ---" << endl;
-            cout << "Name: " << table[index].name << endl;
-            cout << "Balance: $" << fixed << setprecision(2) << table[index].balance << endl;
-        } else {
-            cout << "\n[Error] Account not found!" << endl;
-        }
-    }
-};
 // ==========================================
 // PART 2: MEMBER 2 (Operations - Token Queue)
 // কাজ: ব্যাংকের সিরিয়াল বা টোকেন লাইন মেইনটেইন করা
