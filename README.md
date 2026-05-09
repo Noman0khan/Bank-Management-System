@@ -42,7 +42,7 @@ Demonstrates core **Data Structures** — Hash Table, Queue, and Stack.
 g++ bank_project.cpp -o bank
 ./bank
 ```
-Or open `main.cpp` in **Code::Blocks / Dev-C++** and click Build & Run.
+Or open `bank_project.cpp ` in **Code::Blocks / Dev-C++** and click Build & Run.
 
 ---
 
