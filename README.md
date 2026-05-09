@@ -39,7 +39,7 @@ Demonstrates core **Data Structures** — Hash Table, Queue, and Stack.
 ## ▶️ How to Run
 
 ```bash
-g++ main.cpp -o bank
+g++ bank_project.cpp -o bank
 ./bank
 ```
 Or open `main.cpp` in **Code::Blocks / Dev-C++** and click Build & Run.
