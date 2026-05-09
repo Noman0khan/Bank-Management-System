@@ -32,7 +32,7 @@ Demonstrates core **Data Structures** — Hash Table, Queue, and Stack.
 |---|---|
 | Member 1:-Md. Jarif Chowdhury  | Hash Table — Account creation & search |
 | Member 2:-Md.Abdullah Al Noman | Queue & Stack — Service line & history |
-| Member 3:= Md.Ahosan Habib Tanjim| Main menu & integration |
+| Member 3:- Md.Ahosan Habib Tanjim| Main menu & integration |
 
 ---
 
