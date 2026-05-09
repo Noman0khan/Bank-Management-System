@@ -4,118 +4,156 @@
 
 using namespace std;
 
-// PART 1: MEMBER 1 (Data & Hashing)
-
+// ==========================================
+// PART 1: MEMBER 1 (Hash Table)
+// ==========================================
 struct Customer {
     int id;
     string name;
     double balance;
 };
 
-Customer accounts[100]; 
-bool isOccupied[100];   
+Customer accounts[100];
+bool isOccupied[100];
+
+int findIndex(int id) {
+    int h = id % 100;
+    int start = h;
+    while (isOccupied[h]) {
+        if (accounts[h].id == id) return h;
+        h = (h + 1) % 100;
+        if (h == start) break;
+    }
+    return -1;
+}
 
 void createAccount(int id, string name, double bal) {
-    int index = id % 100; // Feature: Hash Table for efficient searching
-    accounts[index].id = id;
-    accounts[index].name = name;
-    accounts[index].balance = bal;
-    isOccupied[index] = true;
+    int h = id % 100;
+    while (isOccupied[h]) h = (h + 1) % 100;
+    accounts[h].id = id;
+    accounts[h].name = name;
+    accounts[h].balance = bal;
+    isOccupied[h] = true;
     cout << "\n[Success] Account created for " << name << endl;
 }
 
-void searchAccount(int id) {
-    int index = id % 100;
-    if (isOccupied[index] && accounts[index].id == id) {
-        cout << "\n--- Account Details ---" << endl;
-        cout << "Name: " << accounts[index].name << endl;
-        cout << "Balance: $" << fixed << setprecision(2) << accounts[index].balance << endl;
-    } else {
-        cout << "\n[Error] Account not found!" << endl;
+// ==========================================
+// PART 2: MEMBER 2 (Queue & Stack Operations)
+// ==========================================
+
+// --- Queue: For Token Line ---
+int queueLine[100];
+int front = 0, rear = 0;
+
+void addToQueue(int id) {
+    if (rear < 100) {
+        queueLine[rear++] = id; // Enqueue operation
+        cout << "\n[Queue] ID " << id << " added to line." << endl;
     }
 }
 
-// ==========================================
-// PART 2: MEMBER 2 (Operations - Token Queue)
-// কাজ: ব্যাংকের সিরিয়াল বা টোকেন লাইন মেইনটেইন করা
-// ==========================================
-
-class BankOperations {
-    int queueArray[100]; // ১০০ জনের ওয়েটিং লাইন
-    int front = 0;       // লাইনের শুরু
-    int rear = 0;        // লাইনের শেষ
-
-public:
-    // Queue Logic: First-In First-Out (FIFO)
-    void addToLine(int id) {
-        if (rear < 100) {
-            queueArray[rear] = id;
-            rear++; // লাইনের পেছনে একজন যুক্ত হলো
-            cout << "\n[Queue] ID " << id << " added to the line. Position: " << (rear - front) << endl;
-        } else {
-            cout << "\n[Error] Waiting line is full!" << endl;
+// --- Middle Removal from Queue ---
+void leaveLine(int id) {
+    int foundIdx = -1;
+    for (int i = front; i < rear; i++) {
+        if (queueLine[i] == id) {
+            foundIdx = i;
+            break;
         }
     }
-
-    void serveCustomer() {
-        if (front == rear) {
-            cout << "\n[Empty] No one is waiting in the line!" << endl;
-        } else {
-            cout << "\n[Service] Now serving Customer ID: " << queueArray[front] << endl;
-            front++; // সেবা দেওয়া শেষ, পরের জন সামনে আসবে
+    if (foundIdx != -1) {
+        // Shifting elements to maintain Queue order
+        for (int i = foundIdx; i < rear - 1; i++) {
+            queueLine[i] = queueLine[i + 1];
         }
+        rear--;
+        cout << "\n[Queue] ID " << id << " left the line." << endl;
+    } else {
+        cout << "\n[Error] ID not in line!" << endl;
     }
-};
+}
 
+void serveNext() {
+    if (front == rear) cout << "\n[Empty] No one in line!" << endl;
+    else {
+        cout << "\n[Service] Now serving ID: " << queueLine[front++] << endl; // Dequeue operation
+    }
+}
 
+// --- Stack: For History Record ---
+string historyStack[100];
+int top = -1;
 
-    void undoAction() {
-// PART 3: MEMBER 3 (Main Menu & Integration)
+void pushHistory(string msg) {
+    if (top < 99) historyStack[++top] = msg;
+}
+
+void showLastAction() {
+    if (top == -1) cout << "\n[History] No records yet." << endl;
+    else cout << "\n[Last Task] " << historyStack[top] << " (Total tasks: " << (top + 1) << ")" << endl;
+}
+
+// ==========================================
+// PART 3: MEMBER 3 (Menu & Integration)
+// ==========================================
 int main() {
-    BankDatabase myBank;
-    BankOperations myOps;
+    for(int i = 0; i < 100; i++) isOccupied[i] = false;
     int choice, id;
     string name;
     double bal;
 
     while (true) {
-        cout << "\n====================================" << endl;
-        cout << "      BANK MANAGEMENT SYSTEM        " << endl;
-        cout << "====================================" << endl;
-        cout << " 1. Open New Account (Hashing)" << endl;
-        cout << " 2. Search Account Info" << endl;
-        cout << " 3. Join Waiting Line (Queue)" << endl;
-        cout << " 4. Serve Next Customer (Dequeue)" << endl;
-        cout << " 5. Exit" << endl;
-        cout << "------------------------------------" << endl;
-        cout << " ENTER CHOICE: ";
-        cin >> choice;
+        cout << "\n--- BUBT BANKING SYSTEM (Queue & Hash) ---" << endl;
+        cout << "1. Create Account (Hash Table)" << endl;
+        cout << "2. Join Line (Queue Enqueue)" << endl;
+        cout << "3. Leave Line (Queue Removal)" << endl;
+        cout << "4. Service Next (Queue Dequeue)" << endl;
+        cout << "5. Search Account (Hash Table Search)" << endl;
+        cout << "6. View Last Action (Stack Top)" << endl;
+        cout << "7. Exit" << endl;
+        cout << "Enter Choice: ";
 
-        if (choice == 5) {
-            cout << "\nExiting... Thank you!" << endl;
-            break;
+        if (!(cin >> choice)) {
+            cin.clear();
+            string discard; getline(cin, discard);
+            continue;
         }
+
+        if (choice == 7) break;
 
         switch (choice) {
             case 1:
-                cout << "Enter ID: "; cin >> id;
-                cout << "Enter Name: "; cin >> name;
-                cout << "Enter Deposit Amount: "; cin >> bal;
-                myBank.addAccount(id, name, bal);
+                cout << "ID: "; cin >> id;
+                cout << "Name: "; cin >> name;
+                cout << "Deposit: "; cin >> bal;
+                createAccount(id, name, bal);
+                pushHistory("Created Account ID: " + to_string(id));
                 break;
             case 2:
-                cout << "Enter ID to search: "; cin >> id;
-                myBank.findAndShow(id);
+                cout << "Enter ID: "; cin >> id;
+                addToQueue(id);
+                pushHistory("ID " + to_string(id) + " joined line.");
                 break;
             case 3:
-                cout << "Enter ID for Token: "; cin >> id;
-                myOps.addToLine(id);
+                cout << "Enter ID to leave: "; cin >> id;
+                leaveLine(id);
+                pushHistory("ID " + to_string(id) + " left line.");
                 break;
             case 4:
-                myOps.serveCustomer();
+                serveNext();
+                pushHistory("Customer served.");
+                break;
+            case 5:
+                cout << "Search ID: "; cin >> id;
+                int idx; idx = findIndex(id);
+                if (idx != -1) cout << "Found: " << accounts[idx].name << " | Bal: $" << fixed << setprecision(2) << accounts[idx].balance << endl;
+                else cout << "Not Found!" << endl;
+                break;
+            case 6:
+                showLastAction();
                 break;
             default:
-                cout << "\n[Invalid] Please select a valid option (1-5)." << endl;
+                cout << "Invalid choice!" << endl;
         }
     }
     return 0;
